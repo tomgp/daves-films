@@ -28,6 +28,11 @@
       margin-right:auto;
   }
 
+  .colophon{
+    padding:10px;
+    border-top: solid 1px #333;
+  }
+
   /* General */
 
   body {margin: 0px auto;}
