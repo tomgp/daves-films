@@ -1,40 +1,77 @@
 <html>
     <head>
+        <style>
+            body{
+                font-family:sans-serif;
+                color: #333;
+            }
+
+            th{
+                font-size: 2rem;
+            }
+
+            .button{
+                background-color: #A00;
+            }
+            #navigation{
+                background-color: #EFEFEF;
+                margin: 10px;
+                padding-left: 10px;
+            }
+            #main-content-container{
+                padding-left: 10px;
+                margin:10px;
+            }
+            #container{
+                max-width: 600px;
+                margin-left:auto;
+                margin-right:auto;
+            }
+        </style>
         <script type="text/javascript" src="js/vendor/icanhaz.js"></script>
         <script type="text/javascript" src="js/vendor/zepto.js"></script>
         <script type="text/javascript" src="js/vendor/tabletop.js"></script>
-        <script type="text/javascript" src="js/vendor/d3.js"></script>
+        <!-- <script type="text/javascript" src="js/vendor/d3.js"></script> -->
         <script type="text/javascript" src="js/vendor/sheetsee.js"></script>
     </head>
     <link rel="stylesheet" type="text/css" href="css/style.css"> 
     <body>
-    <div id='navigation'>
-    <div id='main-content-container'>
+    <div id="container">
+        <div id="navigation">
+            <input id="tableFilter" type="text" placeholder="filter by.."></input>
+            <span class="clear button">Clear</span>
+            <span class="noMatches">no matches</span>
+        </div>
+        <div id='main-content-container'>
+            <div id="filmsTable"></div>
+        </div>
     </div>
+
+    <script id="filmsTable" type="text/html">
+        <table>
+            <tr><th class="tHeader">Film</th><th class="tHeader">HDD</th></tr>
+            {{#rows}}
+                <tr><td><a href="http://www.imdb.com/find?q={{name}}&s=all">{{name}}</a></td><td>{{volume}}</td></tr>
+            {{/rows}}
+        </table>
+    </script>
+
     <script type="text/javascript">
-      document.addEventListener('DOMContentLoaded', function() {
-        var gData
+    var gData;
+      document.addEventListener('DOMContentLoaded', function() {  
         var spreadsheetKey = "0AtdFkghmKEyWdDd2TGxYNkMtZGlhS3U4aDQzdTVTaFE"
-        Tabletop.init( { key: spreadsheetKey, callback: showInfo, simpleSheet: true } ) 
+        Tabletop.init( { 
+            key: spreadsheetKey, 
+            callback: function(data){
+                showInfo(data);
+            }, 
+            simpleSheet: true } ) 
       })
 
-      function showInfo(data) {
-        console.log(data);
-       /* gData = data
-        optionsJSON = ["something", "something"]
-        var geoJSON = Sheetsee.createGeoJSON(gData, optionsJSON)
-        var map = Sheetsee.loadMap("map")
-        Sheetsee.addTileLayer(map, 'examples.map-20v6611k')
-        var markerLayer = Sheetsee.addMarkerLayer(geoJSON, map)
-        // customize the popup content
-        addPopups(map, markerLayer)
-        function addPopups(map, markerLayer) {
-          markerLayer.on('click', function(e) {
-            var feature = e.layer.feature
-            var popupContent = '<h3>' + feature.opts.something + '</h3>'
-            e.layer.bindPopup(popupContent,{closeButton: false})
-          })
-        }*/
+      function showInfo(d) {
+        gData = d;
+        Sheetsee.makeTable(d, "#filmsTable")
+        Sheetsee.initiateTableFilter(d, "#tableFilter", "#filmsTable")
       }
     </script>
     </body>
