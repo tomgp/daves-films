@@ -20,6 +20,7 @@ function initiateTableFilter(data, filterDiv, tableDiv) {
 
 function searchTable(data, searchTerm, tableDiv) {
   var filteredList = []
+  searchTerm = searchTerm.toLowerCase();
   data.forEach(function(object) {
     var stringObject = JSON.stringify(object).toLowerCase()
     if (stringObject.match(searchTerm)) filteredList.push(object)
